@@ -24,7 +24,8 @@ type GetEmbedding200Response struct {
 	Id *string `json:"id,omitempty"`
 	Model *string `json:"model,omitempty"`
 	Dimensions *int32 `json:"dimensions,omitempty"`
-	Embedding *GetEmbedding200ResponseEmbedding `json:"embedding,omitempty"`
+	// Embedding vector as float array, or base64 string when embedding_format=base64
+	Embedding []float32 `json:"embedding,omitempty"`
 }
 
 // NewGetEmbedding200Response instantiates a new GetEmbedding200Response object
@@ -205,17 +206,17 @@ func (o *GetEmbedding200Response) SetDimensions(v int32) {
 }
 
 // GetEmbedding returns the Embedding field value if set, zero value otherwise.
-func (o *GetEmbedding200Response) GetEmbedding() GetEmbedding200ResponseEmbedding {
+func (o *GetEmbedding200Response) GetEmbedding() []float32 {
 	if o == nil || IsNil(o.Embedding) {
-		var ret GetEmbedding200ResponseEmbedding
+		var ret []float32
 		return ret
 	}
-	return *o.Embedding
+	return o.Embedding
 }
 
 // GetEmbeddingOk returns a tuple with the Embedding field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetEmbedding200Response) GetEmbeddingOk() (*GetEmbedding200ResponseEmbedding, bool) {
+func (o *GetEmbedding200Response) GetEmbeddingOk() ([]float32, bool) {
 	if o == nil || IsNil(o.Embedding) {
 		return nil, false
 	}
@@ -231,9 +232,9 @@ func (o *GetEmbedding200Response) HasEmbedding() bool {
 	return false
 }
 
-// SetEmbedding gets a reference to the given GetEmbedding200ResponseEmbedding and assigns it to the Embedding field.
-func (o *GetEmbedding200Response) SetEmbedding(v GetEmbedding200ResponseEmbedding) {
-	o.Embedding = &v
+// SetEmbedding gets a reference to the given []float32 and assigns it to the Embedding field.
+func (o *GetEmbedding200Response) SetEmbedding(v []float32) {
+	o.Embedding = v
 }
 
 func (o GetEmbedding200Response) MarshalJSON() ([]byte, error) {

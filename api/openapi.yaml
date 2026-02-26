@@ -350,7 +350,7 @@ paths:
         name: id
         required: true
         schema:
-          $ref: '#/components/schemas/getStory_id_parameter'
+          type: string
         style: simple
       - description: Include embedding vectors for the story centroid and each member
           article. Requires Pro tier or higher.
@@ -390,13 +390,13 @@ paths:
       operationId: listStoryDevelopments
       parameters:
       - description: Story ID (integer) or slug (string)
-        example: 1523
+        example: "1523"
         explode: false
         in: path
         name: id
         required: true
         schema:
-          $ref: '#/components/schemas/getStory_id_parameter'
+          type: string
         style: simple
       responses:
         "200":
@@ -414,13 +414,13 @@ paths:
       operationId: getStoryUpdates
       parameters:
       - description: Story ID (integer) or slug (string)
-        example: 1523
+        example: "1523"
         explode: false
         in: path
         name: id
         required: true
         schema:
-          $ref: '#/components/schemas/getStory_id_parameter'
+          type: string
         style: simple
       - description: Unix timestamp in milliseconds to check for updates since
         example: 1708300800000
@@ -701,7 +701,7 @@ paths:
         name: id
         required: true
         schema:
-          $ref: '#/components/schemas/getStory_id_parameter'
+          type: string
         style: simple
       responses:
         "200":
@@ -725,7 +725,7 @@ paths:
         name: id
         required: true
         schema:
-          $ref: '#/components/schemas/getStory_id_parameter'
+          type: string
         style: simple
       - description: Number of articles to return (max 100)
         example: 20
@@ -2230,10 +2230,6 @@ components:
           items:
             $ref: '#/components/schemas/Story'
           type: array
-    getStory_id_parameter:
-      oneOf:
-      - type: integer
-      - type: string
     listStoryDevelopments_200_response:
       example:
         developments:
@@ -2863,12 +2859,6 @@ components:
         count:
           example: 8
           type: integer
-    getEmbedding_200_response_embedding:
-      oneOf:
-      - items:
-          type: number
-      - description: Base64-encoded little-endian float32 binary
-        type: string
     getEmbedding_200_response:
       example:
         model: text-embedding-3-small
@@ -2896,7 +2886,10 @@ components:
           example: 1536
           type: integer
         embedding:
-          $ref: '#/components/schemas/getEmbedding_200_response_embedding'
+          description: "Embedding vector as float array, or base64 string when embedding_format=base64"
+          items:
+            type: number
+          type: array
     vectorSearch_request:
       properties:
         embedding:

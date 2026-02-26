@@ -825,7 +825,7 @@ func (a *DefaultAPIService) GetEmbeddingExecute(r ApiGetEmbeddingRequest) (*GetE
 type ApiGetEntityRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	id GetStoryIdParameter
+	id string
 }
 
 func (r ApiGetEntityRequest) Execute() (*EntityDetail, *http.Response, error) {
@@ -841,7 +841,7 @@ Retrieve a single entity by its numeric ID or slug.
  @param id Entity ID (integer) or slug (string)
  @return ApiGetEntityRequest
 */
-func (a *DefaultAPIService) GetEntity(ctx context.Context, id GetStoryIdParameter) ApiGetEntityRequest {
+func (a *DefaultAPIService) GetEntity(ctx context.Context, id string) ApiGetEntityRequest {
 	return ApiGetEntityRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1342,7 +1342,7 @@ func (a *DefaultAPIService) GetStatsExecute(r ApiGetStatsRequest) (*Stats, *http
 type ApiGetStoryRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	id GetStoryIdParameter
+	id string
 	includeEmbeddings *bool
 	embeddingFormat *string
 }
@@ -1372,7 +1372,7 @@ Retrieve a single story by its numeric ID or slug. Returns full story detail inc
  @param id Story ID (integer) or slug (string)
  @return ApiGetStoryRequest
 */
-func (a *DefaultAPIService) GetStory(ctx context.Context, id GetStoryIdParameter) ApiGetStoryRequest {
+func (a *DefaultAPIService) GetStory(ctx context.Context, id string) ApiGetStoryRequest {
 	return ApiGetStoryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1622,7 +1622,7 @@ func (a *DefaultAPIService) GetStoryEntityGraphExecute(r ApiGetStoryEntityGraphR
 type ApiGetStoryUpdatesRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	id GetStoryIdParameter
+	id string
 	sinceMs *int64
 }
 
@@ -1645,7 +1645,7 @@ Check for new articles and changes to a story since a given timestamp. Returns n
  @param id Story ID (integer) or slug (string)
  @return ApiGetStoryUpdatesRequest
 */
-func (a *DefaultAPIService) GetStoryUpdates(ctx context.Context, id GetStoryIdParameter) ApiGetStoryUpdatesRequest {
+func (a *DefaultAPIService) GetStoryUpdates(ctx context.Context, id string) ApiGetStoryUpdatesRequest {
 	return ApiGetStoryUpdatesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -2651,7 +2651,7 @@ func (a *DefaultAPIService) ListEntitiesExecute(r ApiListEntitiesRequest) (*List
 type ApiListEntityArticlesRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	id GetStoryIdParameter
+	id string
 	limit *int32
 	offset *int32
 }
@@ -2681,7 +2681,7 @@ Retrieve a paginated list of articles that mention a specific entity, ordered by
  @param id Entity ID (integer) or slug (string)
  @return ApiListEntityArticlesRequest
 */
-func (a *DefaultAPIService) ListEntityArticles(ctx context.Context, id GetStoryIdParameter) ApiListEntityArticlesRequest {
+func (a *DefaultAPIService) ListEntityArticles(ctx context.Context, id string) ApiListEntityArticlesRequest {
 	return ApiListEntityArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -3486,7 +3486,7 @@ func (a *DefaultAPIService) ListStoriesExecute(r ApiListStoriesRequest) (*ListSt
 type ApiListStoryDevelopmentsRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	id GetStoryIdParameter
+	id string
 }
 
 func (r ApiListStoryDevelopmentsRequest) Execute() (*ListStoryDevelopments200Response, *http.Response, error) {
@@ -3502,7 +3502,7 @@ Retrieve the timeline of developments for a story. Each development represents a
  @param id Story ID (integer) or slug (string)
  @return ApiListStoryDevelopmentsRequest
 */
-func (a *DefaultAPIService) ListStoryDevelopments(ctx context.Context, id GetStoryIdParameter) ApiListStoryDevelopmentsRequest {
+func (a *DefaultAPIService) ListStoryDevelopments(ctx context.Context, id string) ApiListStoryDevelopmentsRequest {
 	return ApiListStoryDevelopmentsRequest{
 		ApiService: a,
 		ctx: ctx,
