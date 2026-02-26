@@ -1126,7 +1126,7 @@ paths:
           description: Key has no associated user account
       summary: Get API usage and quota
       x-group: Account
-  /api/v1/backtest:
+  /api/backtest:
     get:
       description: |
         Replay historical WebSocket events for backtesting trading strategies and news analysis pipelines. Returns events in chronological order with cursor-based pagination.
@@ -1274,7 +1274,7 @@ paths:
       x-group: Backtesting
     post:
       description: |
-        Same as `GET /api/v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+        Same as `GET /api/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
 
         Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
       operationId: backtestReplayWithEmbeddings

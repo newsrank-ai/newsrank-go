@@ -153,7 +153,7 @@ func (a *DefaultAPIService) BacktestReplayExecute(r ApiBacktestReplayRequest) (*
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/backtest"
+	localVarPath := localBasePath + "/api/backtest"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -292,7 +292,7 @@ func (r ApiBacktestReplayWithEmbeddingsRequest) Execute() (*BacktestReplayWithEm
 /*
 BacktestReplayWithEmbeddings Replay events with embedding filters
 
-Same as `GET /api/v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+Same as `GET /api/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
 
 Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
 
@@ -322,7 +322,7 @@ func (a *DefaultAPIService) BacktestReplayWithEmbeddingsExecute(r ApiBacktestRep
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/backtest"
+	localVarPath := localBasePath + "/api/backtest"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
