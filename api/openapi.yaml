@@ -1126,6 +1126,178 @@ paths:
           description: Key has no associated user account
       summary: Get API usage and quota
       x-group: Account
+  /api/v1/backtest:
+    get:
+      description: |
+        Replay historical WebSocket events for backtesting trading strategies and news analysis pipelines. Returns events in chronological order with cursor-based pagination.
+
+        Mirrors the WebSocket subscribe filter system — filter by topics, categories, sources, keywords, and entities. Requires **Pro tier or higher**.
+
+        Use `topics` to select event classes: `"articles"` maps to `item.new` and `item.enriched` events; `"stories"` maps to `story.development`, `story.priority_changed`, and `cluster.event`. The `clusters.ranked` event type is excluded by default and must be explicitly listed in `types` to include.
+
+        Events are retained for 90 days. Each request can span at most 7 days (`to - from`).
+      operationId: backtestReplay
+      parameters:
+      - description: Start of time range (Unix milliseconds). Must be within the last
+          90 days.
+        example: 1740000000000
+        explode: true
+        in: query
+        name: from
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: End of time range (Unix milliseconds). Max 7-day window from
+          `from`.
+        example: 1740604800000
+        explode: true
+        in: query
+        name: to
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: "Comma-separated topic classes: `articles`, `stories`. Maps to\
+          \ underlying event types."
+        example: "articles,stories"
+        explode: true
+        in: query
+        name: topics
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Comma-separated event types (overrides `topics`): `item.new`,\
+          \ `item.enriched`, `story.development`, `story.priority_changed`, `cluster.event`,\
+          \ `clusters.ranked`."
+        example: "item.new,item.enriched"
+        explode: true
+        in: query
+        name: types
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-separated category filter (OR logic)
+        example: "politics,business"
+        explode: true
+        in: query
+        name: categories
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-separated source ID filter (OR logic)
+        example: "reuters,ap-news"
+        explode: true
+        in: query
+        name: sources
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Comma-separated keyword filter — matches against article titles\
+          \ (OR logic, case-insensitive)"
+        example: "climate,carbon"
+        explode: true
+        in: query
+        name: keywords
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-separated entity IDs to filter by (matches `item.enriched`
+          events)
+        example: "42,108"
+        explode: true
+        in: query
+        name: entities
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by a specific story cluster ID
+        example: 1523
+        explode: true
+        in: query
+        name: cluster_id
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Attach embedding vectors to article events in the response
+        explode: true
+        in: query
+        name: include_embeddings
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: Pagination cursor — pass `next_cursor` from the previous response
+        example: 0
+        explode: true
+        in: query
+        name: cursor
+        required: false
+        schema:
+          default: 0
+          format: int64
+          type: integer
+        style: form
+      - description: Events per page (max 5000)
+        example: 1000
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 1000
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/backtestReplay_200_response'
+          description: Paginated list of historical WebSocket events
+        "400":
+          description: "Invalid parameters (missing from/to, window too large, etc.)"
+        "403":
+          description: Requires Pro tier or higher
+      summary: Replay historical WebSocket events
+      x-group: Backtesting
+    post:
+      description: |
+        Same as `GET /api/v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+
+        Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
+      operationId: backtestReplayWithEmbeddings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/backtestReplayWithEmbeddings_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/backtestReplayWithEmbeddings_200_response'
+          description: Paginated list of historical WebSocket events with similarity
+            scores
+        "400":
+          description: Invalid parameters or embedding dimensions
+        "403":
+          description: Requires Pro tier or higher
+      summary: Replay events with embedding filters
+      x-group: Backtesting
 components:
   schemas:
     Item:
@@ -1846,6 +2018,72 @@ components:
         total_sources:
           example: 312
           type: integer
+    BacktestEvent:
+      example:
+        cluster_id: 1523
+        event_type: item.new
+        payload: "{}"
+        similarity: 0.82
+        id: 12345
+        embedding:
+        - 0.8008281904610115
+        - 0.8008281904610115
+        ts: 1740000000000
+      properties:
+        id:
+          example: 12345
+          format: int64
+          type: integer
+        ts:
+          description: Event timestamp (Unix milliseconds)
+          example: 1740000000000
+          format: int64
+          type: integer
+        event_type:
+          enum:
+          - item.new
+          - item.enriched
+          - story.development
+          - story.priority_changed
+          - cluster.event
+          - clusters.ranked
+          example: item.new
+          type: string
+        cluster_id:
+          description: Story cluster ID (0 for article-only events)
+          example: 1523
+          format: int64
+          type: integer
+        payload:
+          description: The original WebSocket event payload
+          type: object
+        similarity:
+          description: Cosine similarity score (only present when embedding filter
+            is active)
+          example: 0.82
+          type: number
+          nullable: true
+        embedding:
+          description: Embedding vector (only present when include_embeddings=true)
+          items:
+            type: number
+          type: array
+          nullable: true
+    BacktestEmbeddingFilter:
+      properties:
+        embedding:
+          description: 1536-dimensional embedding vector for similarity search
+          items:
+            type: number
+          type: array
+        threshold:
+          description: "Minimum cosine similarity threshold (0.0–1.0, default 0.75)"
+          example: 0.75
+          type: number
+        label:
+          description: Optional label for this filter
+          example: climate-news
+          type: string
     ApiVersionInfo:
       example:
         api_latest: v1
@@ -2923,6 +3161,236 @@ components:
           items:
             $ref: '#/components/schemas/getUsage_200_response_daily_inner'
           type: array
+    backtestReplay_200_response_meta:
+      example:
+        topics:
+        - articles
+        event_count: 1000
+        filters_applied:
+          key:
+          - filters_applied
+          - filters_applied
+        from: 1740000000000
+        to: 1740604800000
+      properties:
+        from:
+          example: 1740000000000
+          format: int64
+          type: integer
+        to:
+          example: 1740604800000
+          format: int64
+          type: integer
+        topics:
+          example:
+          - articles
+          items:
+            type: string
+          type: array
+        filters_applied:
+          additionalProperties:
+            items:
+              type: string
+        event_count:
+          example: 1000
+          type: integer
+    backtestReplay_200_response:
+      example:
+        next_cursor: 12399
+        meta:
+          topics:
+          - articles
+          event_count: 1000
+          filters_applied:
+            key:
+            - filters_applied
+            - filters_applied
+          from: 1740000000000
+          to: 1740604800000
+        has_more: true
+        ok: true
+        events:
+        - cluster_id: 1523
+          event_type: item.new
+          payload: "{}"
+          similarity: 0.82
+          id: 12345
+          embedding:
+          - 0.8008281904610115
+          - 0.8008281904610115
+          ts: 1740000000000
+        - cluster_id: 1523
+          event_type: item.new
+          payload: "{}"
+          similarity: 0.82
+          id: 12345
+          embedding:
+          - 0.8008281904610115
+          - 0.8008281904610115
+          ts: 1740000000000
+      properties:
+        ok:
+          example: true
+          type: boolean
+        events:
+          items:
+            $ref: '#/components/schemas/BacktestEvent'
+          type: array
+        next_cursor:
+          description: Cursor for the next page. Pass as `cursor` in the next request.
+          example: 12399
+          format: int64
+          type: integer
+        has_more:
+          description: Whether more events are available after this page
+          example: true
+          type: boolean
+        meta:
+          $ref: '#/components/schemas/backtestReplay_200_response_meta'
+    backtestReplayWithEmbeddings_request:
+      properties:
+        from:
+          description: Start of time range (Unix milliseconds)
+          example: 1740000000000
+          format: int64
+          type: integer
+        to:
+          description: End of time range (Unix milliseconds)
+          example: 1740604800000
+          format: int64
+          type: integer
+        topics:
+          description: "Topic classes: `articles`, `stories`"
+          example:
+          - articles
+          items:
+            type: string
+          type: array
+        categories:
+          example:
+          - politics
+          - business
+          items:
+            type: string
+          type: array
+        sources:
+          example:
+          - reuters
+          items:
+            type: string
+          type: array
+        keywords:
+          example:
+          - climate
+          items:
+            type: string
+          type: array
+        entities:
+          example:
+          - 42
+          - 108
+          items:
+            type: integer
+          type: array
+        include_embeddings:
+          default: false
+          type: boolean
+        embedding_filters:
+          description: Max 1 embedding filter per request
+          items:
+            $ref: '#/components/schemas/BacktestEmbeddingFilter'
+          type: array
+        cursor:
+          default: 0
+          format: int64
+          type: integer
+        limit:
+          default: 1000
+          type: integer
+      required:
+      - from
+      - to
+    backtestReplayWithEmbeddings_200_response_meta:
+      example:
+        topics:
+        - topics
+        - topics
+        event_count: 1
+        filters_applied:
+          key:
+          - filters_applied
+          - filters_applied
+        from: 0
+        to: 6
+      properties:
+        from:
+          format: int64
+          type: integer
+        to:
+          format: int64
+          type: integer
+        topics:
+          items:
+            type: string
+          type: array
+        filters_applied:
+          additionalProperties:
+            items:
+              type: string
+        event_count:
+          type: integer
+    backtestReplayWithEmbeddings_200_response:
+      example:
+        next_cursor: 12399
+        meta:
+          topics:
+          - topics
+          - topics
+          event_count: 1
+          filters_applied:
+            key:
+            - filters_applied
+            - filters_applied
+          from: 0
+          to: 6
+        has_more: true
+        ok: true
+        events:
+        - cluster_id: 1523
+          event_type: item.new
+          payload: "{}"
+          similarity: 0.82
+          id: 12345
+          embedding:
+          - 0.8008281904610115
+          - 0.8008281904610115
+          ts: 1740000000000
+        - cluster_id: 1523
+          event_type: item.new
+          payload: "{}"
+          similarity: 0.82
+          id: 12345
+          embedding:
+          - 0.8008281904610115
+          - 0.8008281904610115
+          ts: 1740000000000
+      properties:
+        ok:
+          example: true
+          type: boolean
+        events:
+          items:
+            $ref: '#/components/schemas/BacktestEvent'
+          type: array
+        next_cursor:
+          example: 12399
+          format: int64
+          type: integer
+        has_more:
+          example: true
+          type: boolean
+        meta:
+          $ref: '#/components/schemas/backtestReplayWithEmbeddings_200_response_meta'
     StoryUpdateSignal_new_articles_inner:
       example:
         url_hash: url_hash

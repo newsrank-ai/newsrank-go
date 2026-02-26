@@ -23,6 +23,384 @@ import (
 // DefaultAPIService DefaultAPI service
 type DefaultAPIService service
 
+type ApiBacktestReplayRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	from *int64
+	to *int64
+	topics *string
+	types *string
+	categories *string
+	sources *string
+	keywords *string
+	entities *string
+	clusterId *int64
+	includeEmbeddings *bool
+	cursor *int64
+	limit *int32
+}
+
+// Start of time range (Unix milliseconds). Must be within the last 90 days.
+func (r ApiBacktestReplayRequest) From(from int64) ApiBacktestReplayRequest {
+	r.from = &from
+	return r
+}
+
+// End of time range (Unix milliseconds). Max 7-day window from &#x60;from&#x60;.
+func (r ApiBacktestReplayRequest) To(to int64) ApiBacktestReplayRequest {
+	r.to = &to
+	return r
+}
+
+// Comma-separated topic classes: &#x60;articles&#x60;, &#x60;stories&#x60;. Maps to underlying event types.
+func (r ApiBacktestReplayRequest) Topics(topics string) ApiBacktestReplayRequest {
+	r.topics = &topics
+	return r
+}
+
+// Comma-separated event types (overrides &#x60;topics&#x60;): &#x60;item.new&#x60;, &#x60;item.enriched&#x60;, &#x60;story.development&#x60;, &#x60;story.priority_changed&#x60;, &#x60;cluster.event&#x60;, &#x60;clusters.ranked&#x60;.
+func (r ApiBacktestReplayRequest) Types(types string) ApiBacktestReplayRequest {
+	r.types = &types
+	return r
+}
+
+// Comma-separated category filter (OR logic)
+func (r ApiBacktestReplayRequest) Categories(categories string) ApiBacktestReplayRequest {
+	r.categories = &categories
+	return r
+}
+
+// Comma-separated source ID filter (OR logic)
+func (r ApiBacktestReplayRequest) Sources(sources string) ApiBacktestReplayRequest {
+	r.sources = &sources
+	return r
+}
+
+// Comma-separated keyword filter — matches against article titles (OR logic, case-insensitive)
+func (r ApiBacktestReplayRequest) Keywords(keywords string) ApiBacktestReplayRequest {
+	r.keywords = &keywords
+	return r
+}
+
+// Comma-separated entity IDs to filter by (matches &#x60;item.enriched&#x60; events)
+func (r ApiBacktestReplayRequest) Entities(entities string) ApiBacktestReplayRequest {
+	r.entities = &entities
+	return r
+}
+
+// Filter by a specific story cluster ID
+func (r ApiBacktestReplayRequest) ClusterId(clusterId int64) ApiBacktestReplayRequest {
+	r.clusterId = &clusterId
+	return r
+}
+
+// Attach embedding vectors to article events in the response
+func (r ApiBacktestReplayRequest) IncludeEmbeddings(includeEmbeddings bool) ApiBacktestReplayRequest {
+	r.includeEmbeddings = &includeEmbeddings
+	return r
+}
+
+// Pagination cursor — pass &#x60;next_cursor&#x60; from the previous response
+func (r ApiBacktestReplayRequest) Cursor(cursor int64) ApiBacktestReplayRequest {
+	r.cursor = &cursor
+	return r
+}
+
+// Events per page (max 5000)
+func (r ApiBacktestReplayRequest) Limit(limit int32) ApiBacktestReplayRequest {
+	r.limit = &limit
+	return r
+}
+
+func (r ApiBacktestReplayRequest) Execute() (*BacktestReplay200Response, *http.Response, error) {
+	return r.ApiService.BacktestReplayExecute(r)
+}
+
+/*
+BacktestReplay Replay historical WebSocket events
+
+Replay historical WebSocket events for backtesting trading strategies and news analysis pipelines. Returns events in chronological order with cursor-based pagination.
+
+Mirrors the WebSocket subscribe filter system — filter by topics, categories, sources, keywords, and entities. Requires **Pro tier or higher**.
+
+Use `topics` to select event classes: `"articles"` maps to `item.new` and `item.enriched` events; `"stories"` maps to `story.development`, `story.priority_changed`, and `cluster.event`. The `clusters.ranked` event type is excluded by default and must be explicitly listed in `types` to include.
+
+Events are retained for 90 days. Each request can span at most 7 days (`to - from`).
+
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiBacktestReplayRequest
+*/
+func (a *DefaultAPIService) BacktestReplay(ctx context.Context) ApiBacktestReplayRequest {
+	return ApiBacktestReplayRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return BacktestReplay200Response
+func (a *DefaultAPIService) BacktestReplayExecute(r ApiBacktestReplayRequest) (*BacktestReplay200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *BacktestReplay200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.BacktestReplay")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/backtest"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.from == nil {
+		return localVarReturnValue, nil, reportError("from is required and must be specified")
+	}
+	if r.to == nil {
+		return localVarReturnValue, nil, reportError("to is required and must be specified")
+	}
+
+	parameterAddToHeaderOrQuery(localVarQueryParams, "from", r.from, "form", "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "to", r.to, "form", "")
+	if r.topics != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "topics", r.topics, "form", "")
+	}
+	if r.types != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "types", r.types, "form", "")
+	}
+	if r.categories != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "categories", r.categories, "form", "")
+	}
+	if r.sources != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sources", r.sources, "form", "")
+	}
+	if r.keywords != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "keywords", r.keywords, "form", "")
+	}
+	if r.entities != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "entities", r.entities, "form", "")
+	}
+	if r.clusterId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cluster_id", r.clusterId, "form", "")
+	}
+	if r.includeEmbeddings != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_embeddings", r.includeEmbeddings, "form", "")
+	} else {
+		var defaultValue bool = false
+		r.includeEmbeddings = &defaultValue
+	}
+	if r.cursor != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	} else {
+		var defaultValue int64 = 0
+		r.cursor = &defaultValue
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 1000
+		r.limit = &defaultValue
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["apiKeyQuery"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarQueryParams.Add("api_key", key)
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiBacktestReplayWithEmbeddingsRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	backtestReplayWithEmbeddingsRequest *BacktestReplayWithEmbeddingsRequest
+}
+
+func (r ApiBacktestReplayWithEmbeddingsRequest) BacktestReplayWithEmbeddingsRequest(backtestReplayWithEmbeddingsRequest BacktestReplayWithEmbeddingsRequest) ApiBacktestReplayWithEmbeddingsRequest {
+	r.backtestReplayWithEmbeddingsRequest = &backtestReplayWithEmbeddingsRequest
+	return r
+}
+
+func (r ApiBacktestReplayWithEmbeddingsRequest) Execute() (*BacktestReplayWithEmbeddings200Response, *http.Response, error) {
+	return r.ApiService.BacktestReplayWithEmbeddingsExecute(r)
+}
+
+/*
+BacktestReplayWithEmbeddings Replay events with embedding filters
+
+Same as `GET /api/v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+
+Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
+
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiBacktestReplayWithEmbeddingsRequest
+*/
+func (a *DefaultAPIService) BacktestReplayWithEmbeddings(ctx context.Context) ApiBacktestReplayWithEmbeddingsRequest {
+	return ApiBacktestReplayWithEmbeddingsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return BacktestReplayWithEmbeddings200Response
+func (a *DefaultAPIService) BacktestReplayWithEmbeddingsExecute(r ApiBacktestReplayWithEmbeddingsRequest) (*BacktestReplayWithEmbeddings200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *BacktestReplayWithEmbeddings200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.BacktestReplayWithEmbeddings")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/backtest"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.backtestReplayWithEmbeddingsRequest == nil {
+		return localVarReturnValue, nil, reportError("backtestReplayWithEmbeddingsRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.backtestReplayWithEmbeddingsRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["apiKeyQuery"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarQueryParams.Add("api_key", key)
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetArticleRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
