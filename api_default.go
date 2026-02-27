@@ -153,7 +153,7 @@ func (a *DefaultAPIService) BacktestReplayExecute(r ApiBacktestReplayRequest) (*
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/backtest"
+	localVarPath := localBasePath + "/v1/backtest"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -292,7 +292,7 @@ func (r ApiBacktestReplayWithEmbeddingsRequest) Execute() (*BacktestReplayWithEm
 /*
 BacktestReplayWithEmbeddings Replay events with embedding filters
 
-Same as `GET /api/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+Same as `GET /v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
 
 Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
 
@@ -322,7 +322,7 @@ func (a *DefaultAPIService) BacktestReplayWithEmbeddingsExecute(r ApiBacktestRep
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/backtest"
+	localVarPath := localBasePath + "/v1/backtest"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -454,7 +454,7 @@ func (a *DefaultAPIService) GetArticleExecute(r ApiGetArticleRequest) (*GetArtic
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/item"
+	localVarPath := localBasePath + "/v1/item"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -587,7 +587,7 @@ func (a *DefaultAPIService) GetArticleContentExecute(r ApiGetArticleContentReque
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/content"
+	localVarPath := localBasePath + "/v1/content"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -734,7 +734,7 @@ func (a *DefaultAPIService) GetEmbeddingExecute(r ApiGetEmbeddingRequest) (*GetE
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/embeddings"
+	localVarPath := localBasePath + "/v1/embeddings"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -864,7 +864,7 @@ func (a *DefaultAPIService) GetEntityExecute(r ApiGetEntityRequest) (*EntityDeta
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/entities/{id}"
+	localVarPath := localBasePath + "/v1/entities/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -999,7 +999,7 @@ func (a *DefaultAPIService) GetEntityNetworkExecute(r ApiGetEntityNetworkRequest
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/graph/entity-network"
+	localVarPath := localBasePath + "/v1/graph/entity-network"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1142,7 +1142,7 @@ func (a *DefaultAPIService) GetRelatedArticlesExecute(r ApiGetRelatedArticlesReq
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/related"
+	localVarPath := localBasePath + "/v1/related"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1265,7 +1265,7 @@ func (a *DefaultAPIService) GetStatsExecute(r ApiGetStatsRequest) (*Stats, *http
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stats"
+	localVarPath := localBasePath + "/v1/stats"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1395,7 +1395,7 @@ func (a *DefaultAPIService) GetStoryExecute(r ApiGetStoryRequest) (*StoryDetail,
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stories/{id}"
+	localVarPath := localBasePath + "/v1/stories/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -1535,7 +1535,7 @@ func (a *DefaultAPIService) GetStoryEntityGraphExecute(r ApiGetStoryEntityGraphR
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/graph/story-entity"
+	localVarPath := localBasePath + "/v1/graph/story-entity"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1668,7 +1668,7 @@ func (a *DefaultAPIService) GetStoryUpdatesExecute(r ApiGetStoryUpdatesRequest) 
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stories/{id}/updates"
+	localVarPath := localBasePath + "/v1/stories/{id}/updates"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -1800,7 +1800,7 @@ func (a *DefaultAPIService) GetTopicClusterGraphExecute(r ApiGetTopicClusterGrap
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/graph/topic-cluster"
+	localVarPath := localBasePath + "/v1/graph/topic-cluster"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1936,7 +1936,7 @@ func (a *DefaultAPIService) GetUsageExecute(r ApiGetUsageRequest) (*GetUsage200R
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/usage"
+	localVarPath := localBasePath + "/v1/usage"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2055,7 +2055,7 @@ func (a *DefaultAPIService) GetVersionInfoExecute(r ApiGetVersionInfoRequest) (*
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/version"
+	localVarPath := localBasePath + "/v1/version"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2238,7 +2238,7 @@ func (a *DefaultAPIService) ListArticlesExecute(r ApiListArticlesRequest) (*List
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/items"
+	localVarPath := localBasePath + "/v1/items"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2405,7 +2405,7 @@ func (a *DefaultAPIService) ListCategoriesExecute(r ApiListCategoriesRequest) ([
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/categories"
+	localVarPath := localBasePath + "/v1/categories"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2553,7 +2553,7 @@ func (a *DefaultAPIService) ListEntitiesExecute(r ApiListEntitiesRequest) (*List
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/entities"
+	localVarPath := localBasePath + "/v1/entities"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2704,7 +2704,7 @@ func (a *DefaultAPIService) ListEntityArticlesExecute(r ApiListEntityArticlesReq
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/entities/{id}/articles"
+	localVarPath := localBasePath + "/v1/entities/{id}/articles"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -2844,7 +2844,7 @@ func (a *DefaultAPIService) ListPoliticiansExecute(r ApiListPoliticiansRequest) 
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/entities/politicians"
+	localVarPath := localBasePath + "/v1/entities/politicians"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2990,7 +2990,7 @@ func (a *DefaultAPIService) ListRankedStoriesExecute(r ApiListRankedStoriesReque
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stories/ranked"
+	localVarPath := localBasePath + "/v1/stories/ranked"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3121,7 +3121,7 @@ func (a *DefaultAPIService) ListSourceRankingsExecute(r ApiListSourceRankingsReq
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/source-rankings"
+	localVarPath := localBasePath + "/v1/source-rankings"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3234,7 +3234,7 @@ func (a *DefaultAPIService) ListSourcesExecute(r ApiListSourcesRequest) ([]Sourc
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/sources"
+	localVarPath := localBasePath + "/v1/sources"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3382,7 +3382,7 @@ func (a *DefaultAPIService) ListStoriesExecute(r ApiListStoriesRequest) (*ListSt
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stories"
+	localVarPath := localBasePath + "/v1/stories"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3525,7 +3525,7 @@ func (a *DefaultAPIService) ListStoryDevelopmentsExecute(r ApiListStoryDevelopme
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/stories/{id}/developments"
+	localVarPath := localBasePath + "/v1/stories/{id}/developments"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -3639,7 +3639,7 @@ func (a *DefaultAPIService) ListTagsExecute(r ApiListTagsRequest) ([]string, *ht
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/tags"
+	localVarPath := localBasePath + "/v1/tags"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3759,7 +3759,7 @@ func (a *DefaultAPIService) ListTrendingEntitiesExecute(r ApiListTrendingEntitie
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/entities/trending"
+	localVarPath := localBasePath + "/v1/entities/trending"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3899,7 +3899,7 @@ func (a *DefaultAPIService) SearchArticlesExecute(r ApiSearchArticlesRequest) (*
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/search"
+	localVarPath := localBasePath + "/v1/search"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4049,7 +4049,7 @@ func (a *DefaultAPIService) SearchFullExecute(r ApiSearchFullRequest) (*SearchFu
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/search/full"
+	localVarPath := localBasePath + "/v1/search/full"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4192,7 +4192,7 @@ func (a *DefaultAPIService) SearchSuggestExecute(r ApiSearchSuggestRequest) (*Se
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/search/suggest"
+	localVarPath := localBasePath + "/v1/search/suggest"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4324,7 +4324,7 @@ func (a *DefaultAPIService) VectorSearchExecute(r ApiVectorSearchRequest) (*Vect
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v1/search/vector"
+	localVarPath := localBasePath + "/v1/search/vector"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

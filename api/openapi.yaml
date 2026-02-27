@@ -10,12 +10,12 @@ info:
   version: 1.0.0
 servers:
 - description: Production
-  url: https://api.newsrank.ai/v1
+  url: https://api.newsrank.ai
 security:
 - apiKeyQuery: []
 - bearerAuth: []
 paths:
-  /api/v1/items:
+  /v1/items:
     get:
       description: "Retrieve a paginated list of articles with optional filters for\
         \ category, keyword, source, content status, and date range."
@@ -158,7 +158,7 @@ paths:
           description: Paginated list of articles
       summary: List articles
       x-group: Articles
-  /api/v1/item:
+  /v1/item:
     get:
       description: Retrieve a single article by its URL hash or slug. Provide either
         `url_hash` or `slug` as a query parameter.
@@ -191,7 +191,7 @@ paths:
           description: Single article
       summary: Get a single article
       x-group: Articles
-  /api/v1/content:
+  /v1/content:
     get:
       description: "Retrieve the extracted full-text content of an article by its\
         \ URL hash. Includes the article body, images, summaries, and tags."
@@ -225,7 +225,7 @@ paths:
           description: Article content
       summary: Get article content
       x-group: Articles
-  /api/v1/stories:
+  /v1/stories:
     get:
       description: "Retrieve a paginated list of news stories, optionally filtered\
         \ by category."
@@ -291,7 +291,7 @@ paths:
           description: Paginated list of stories
       summary: List stories
       x-group: Stories
-  /api/v1/stories/ranked:
+  /v1/stories/ranked:
     get:
       description: Retrieve top stories ranked by relevance and recency.
       operationId: listRankedStories
@@ -337,7 +337,7 @@ paths:
           description: Ranked list of stories
       summary: List ranked stories
       x-group: Stories
-  /api/v1/stories/{id}:
+  /v1/stories/{id}:
     get:
       description: Retrieve a single story by its numeric ID or slug. Returns full
         story detail including articles and developments timeline.
@@ -383,7 +383,7 @@ paths:
           description: Full story detail with optional embeddings
       summary: Get a single story
       x-group: Stories
-  /api/v1/stories/{id}/developments:
+  /v1/stories/{id}/developments:
     get:
       description: Retrieve the timeline of developments for a story. Each development
         represents a significant change or update in the story's progression.
@@ -407,7 +407,7 @@ paths:
           description: List of story developments
       summary: List story developments
       x-group: Stories
-  /api/v1/stories/{id}/updates:
+  /v1/stories/{id}/updates:
     get:
       description: "Check for new articles and changes to a story since a given timestamp.\
         \ Returns new articles, sources, entities, and a significance assessment."
@@ -441,7 +441,7 @@ paths:
           description: Story update signal
       summary: Get story updates since timestamp
       x-group: Stories
-  /api/v1/search:
+  /v1/search:
     get:
       description: Full-text search across all articles. Returns matching articles
         sorted by relevance.
@@ -485,7 +485,7 @@ paths:
           description: Search results
       summary: Search articles
       x-group: Search
-  /api/v1/search/full:
+  /v1/search/full:
     get:
       description: Advanced full-text search that combines FTS results with entity-matched
         articles. Automatically detects entity names in the query and merges relevant
@@ -530,7 +530,7 @@ paths:
           description: Search results with entity matching
       summary: Full-text search with entity matching
       x-group: Search
-  /api/v1/search/suggest:
+  /v1/search/suggest:
     get:
       description: Get autocomplete suggestions for a partial search query.
       operationId: searchSuggest
@@ -563,7 +563,7 @@ paths:
           description: Autocomplete suggestions
       summary: Autocomplete suggestions
       x-group: Search
-  /api/v1/entities:
+  /v1/entities:
     get:
       description: "Retrieve a paginated list of entities (people, organizations,\
         \ locations) with optional filters."
@@ -629,7 +629,7 @@ paths:
           description: Paginated list of entities
       summary: List entities
       x-group: Entities
-  /api/v1/entities/trending:
+  /v1/entities/trending:
     get:
       description: "Retrieve entities currently trending in the news, ranked by recent\
         \ mention frequency."
@@ -654,7 +654,7 @@ paths:
           description: List of trending entities
       summary: List trending entities
       x-group: Entities
-  /api/v1/entities/politicians:
+  /v1/entities/politicians:
     get:
       description: Retrieve entities with the "politician" subcategory. A convenience
         endpoint equivalent to filtering entities by `subcategory=politician`.
@@ -689,7 +689,7 @@ paths:
           description: Paginated list of politician entities
       summary: List politician entities
       x-group: Entities
-  /api/v1/entities/{id}:
+  /v1/entities/{id}:
     get:
       description: Retrieve a single entity by its numeric ID or slug.
       operationId: getEntity
@@ -712,7 +712,7 @@ paths:
           description: Entity detail
       summary: Get a single entity
       x-group: Entities
-  /api/v1/entities/{id}/articles:
+  /v1/entities/{id}/articles:
     get:
       description: "Retrieve a paginated list of articles that mention a specific\
         \ entity, ordered by recency."
@@ -756,7 +756,7 @@ paths:
           description: Paginated list of articles
       summary: List articles mentioning an entity
       x-group: Entities
-  /api/v1/sources:
+  /v1/sources:
     get:
       description: Retrieve the complete list of news sources tracked by NewsRank.
       operationId: listSources
@@ -771,7 +771,7 @@ paths:
           description: Array of sources
       summary: List all sources
       x-group: Sources & Categories
-  /api/v1/categories:
+  /v1/categories:
     get:
       description: Retrieve the list of all article categories.
       operationId: listCategories
@@ -795,7 +795,7 @@ paths:
           description: Array of category strings
       summary: List all categories
       x-group: Sources & Categories
-  /api/v1/tags:
+  /v1/tags:
     get:
       description: Retrieve the list of all article tags.
       operationId: listTags
@@ -815,7 +815,7 @@ paths:
           description: Array of tag strings
       summary: List all tags
       x-group: Sources & Categories
-  /api/v1/source-rankings:
+  /v1/source-rankings:
     get:
       description: "Retrieve authority and quality rankings for all news sources,\
         \ sorted by overall score descending. Includes scoring across timing, content\
@@ -830,7 +830,7 @@ paths:
           description: Source rankings
       summary: List source rankings
       x-group: Sources & Categories
-  /api/v1/graph/entity-network:
+  /v1/graph/entity-network:
     get:
       description: Retrieve the ego-network around an entity up to a specified depth.
         Returns nodes (entities) and edges (relationships) for graph visualization.
@@ -874,7 +874,7 @@ paths:
           description: Entity network graph
       summary: Get entity relationship network
       x-group: Graph
-  /api/v1/graph/story-entity:
+  /v1/graph/story-entity:
     get:
       description: Retrieve the relationship graph between stories and their mentioned
         entities. Useful for visualizing how entities connect across different news
@@ -909,7 +909,7 @@ paths:
           description: Story-entity graph
       summary: Get story-entity graph
       x-group: Graph
-  /api/v1/graph/topic-cluster:
+  /v1/graph/topic-cluster:
     get:
       description: Retrieve the hierarchical graph of topic clusters and their constituent
         event clusters. Shows how individual news events group into broader topics.
@@ -943,7 +943,7 @@ paths:
           description: Topic cluster graph
       summary: Get topic cluster graph
       x-group: Graph
-  /api/v1/related:
+  /v1/related:
     get:
       description: "Retrieve articles related to a given article, determined by semantic\
         \ similarity."
@@ -979,7 +979,7 @@ paths:
           description: Array of related articles
       summary: Get related articles
       x-group: Meta
-  /api/v1/stats:
+  /v1/stats:
     get:
       description: Retrieve aggregate statistics about the NewsRank index.
       operationId: getStats
@@ -992,7 +992,7 @@ paths:
           description: Site statistics
       summary: Get site statistics
       x-group: Meta
-  /api/v1/version:
+  /v1/version:
     get:
       description: Retrieve active API major versions and recommended SDK package
         versions.
@@ -1007,7 +1007,7 @@ paths:
       security: []
       summary: Get API and SDK version metadata
       x-group: Meta
-  /api/v1/embeddings:
+  /v1/embeddings:
     get:
       description: |
         Retrieve the embedding vector for a single article or story. Requires Pro tier or higher.
@@ -1062,7 +1062,7 @@ paths:
           description: Embedding not found
       summary: Get embedding vector
       x-group: Embeddings
-  /api/v1/search/vector:
+  /v1/search/vector:
     post:
       description: |
         Search for articles and/or stories by embedding vector similarity. Submit your own 1536-dimensional embedding and receive the nearest matches from the news corpus.
@@ -1088,7 +1088,7 @@ paths:
           description: Requires Pro tier or higher
       summary: Vector similarity search
       x-group: Embeddings
-  /api/v1/usage:
+  /v1/usage:
     get:
       description: "Returns current month usage, quota information, daily usage breakdown,\
         \ and summary statistics for the authenticated API key. Requires API key authentication."
@@ -1126,7 +1126,7 @@ paths:
           description: Key has no associated user account
       summary: Get API usage and quota
       x-group: Account
-  /api/backtest:
+  /v1/backtest:
     get:
       description: |
         Replay historical WebSocket events for backtesting trading strategies and news analysis pipelines. Returns events in chronological order with cursor-based pagination.
@@ -1274,7 +1274,7 @@ paths:
       x-group: Backtesting
     post:
       description: |
-        Same as `GET /api/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
+        Same as `GET /v1/backtest` but accepts a JSON body for advanced filters including embedding vector similarity search.
 
         Use `embedding_filters` to find events about articles semantically similar to a reference embedding. Max 1 embedding filter per request. Requires **Pro tier or higher**.
       operationId: backtestReplayWithEmbeddings
