@@ -11,6 +11,8 @@ info:
 servers:
 - description: Production
   url: https://api.newsrank.ai
+- description: "Sandbox (free, no signup required)"
+  url: https://sandbox.newsrank.ai
 security:
 - apiKeyQuery: []
 - bearerAuth: []

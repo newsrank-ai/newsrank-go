@@ -92,12 +92,16 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/0.1.10/go",
+		UserAgent:        "OpenAPI-Generator/0.1.11/go",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
 				URL: "https://api.newsrank.ai",
 				Description: "Production",
+			},
+			{
+				URL: "https://sandbox.newsrank.ai",
+				Description: "Sandbox (free, no signup required)",
 			},
 		},
 		OperationServers: map[string]ServerConfigurations{
